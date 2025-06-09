@@ -1,7 +1,9 @@
+use log::error;
 use super::calendar_status::CalendarStatus;
 
 use crate::models::event_response::EventResponse;
 use crate::models::events::Event;
+use crate::service::calendar_status::CalendarStatus::EventNotFound;
 
 pub fn get_all_events() -> Result<EventResponse, CalendarStatus> {
     let events = vec![
@@ -23,7 +25,13 @@ pub fn get_all_events() -> Result<EventResponse, CalendarStatus> {
 }
 
 pub fn get_event_by_title(title: &str) -> Result<Event, CalendarStatus> {
-    let response = get_all_events()?;
+    let response = match get_all_events(){
+      Ok(events)=> events,
+        Err(err)  => {
+            error!("get_all_events failed: {:?}", err);
+            return Err(EventNotFound);
+        }
+    };
     response
         .events
         .into_iter()
