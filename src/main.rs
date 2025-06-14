@@ -1,5 +1,6 @@
 mod models;
 mod service;
+mod repository;
 
 use service::calendar_service::*;
 use service::calendar_status::CalendarStatus;
@@ -17,7 +18,7 @@ fn main() {
                 );
             }
         }
-        Err(e) => println!("Error al obtener eventos: {:?}", e),
+        Err(error_calendar_status) => println!("Error al obtener eventos: {:?}", error_calendar_status),
     }
 
     // Probamos buscar un evento por título
