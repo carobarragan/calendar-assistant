@@ -9,7 +9,8 @@ use crate::service::calendar_status::CalendarStatus::EventNotFound;
 
 /// Calendar Service struct
 pub struct CalendarService {
-    calendar_repository: CalendarRepository
+  pub   calendar_repository: CalendarRepository,
+    pub repository: Arc<dyn CalendarRepositoryTrait + Send + Sync>,
 }
 
 /// Calendar Service trait
@@ -37,8 +38,9 @@ impl CalendarServiceTrait for CalendarService {
 
           }
           Err(error)=>{
-              info!("get_all_events - error  {:?}", error);
-              Err(CalendarStatus::InternalError(error.to_string()))
+              info!("get_all_events - error  {:#?}", error);
+              Err(CalendarStatus::InternalError(format!("{:?}", error)))
+
           }
       }
 
